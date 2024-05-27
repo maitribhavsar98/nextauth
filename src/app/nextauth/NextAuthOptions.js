@@ -1,4 +1,6 @@
 import Credentials from 'next-auth/providers/credentials';
+import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
 import executeQuery from './MySQLConnect'
 
 export const authOptions = {
@@ -19,14 +21,18 @@ export const authOptions = {
                 const user = await executeQuery(query, []);
                 if (Object.keys(user).length > 0) {
                     return {
-                      Id: 1,
-                      email: email,
-                      user: "Dr. Vipin Classes",
+                        Id: 1,
+                        email: email,
+                        user: "Dr. Vipin Classes",
                     };
-                  } else {
+                } else {
                     return null;
-                  }
+                }
             }
-        })
+        }),
+        GoogleProvider({
+            clientId: process.env.NEXTAUTH_CLIENTID,
+            clientSecret: process.env.NEXTAUTH_CLIENTSECRET,
+        }),
     ]
 }
