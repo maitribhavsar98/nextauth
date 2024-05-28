@@ -23,7 +23,7 @@ export const authOptions = {
                     return {
                         Id: 1,
                         email: email,
-                        user: "Dr. Vipin Classes",
+                        user: "Maitri Bhavsar",
                     };
                 } else {
                     return null;
@@ -34,5 +34,25 @@ export const authOptions = {
             clientId: process.env.NEXTAUTH_CLIENTID,
             clientSecret: process.env.NEXTAUTH_CLIENTSECRET,
         }),
-    ]
+    ],
+    callbacks: {
+        jwt: async ({ token, user }) => {
+            console.log("40", user)
+            if (user) {
+                token.email = user.email;
+                token.username = user.user;
+                token.accessToken = user.accessToken;
+            }
+            return token;
+        },
+        session: ({ session, token, user }) => {
+            console.log("49", token)
+            if (token) {
+                session.user.email = token.email;
+                session.user.username = token.username;
+                session.user.accessToken = token.accessToken;
+            }
+            return session;
+        },
+    }
 }
